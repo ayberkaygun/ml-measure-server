@@ -1,0 +1,70 @@
+{
+  "presentation": {
+    "title": "Diabetes Prediction Model",
+    "subtitle": "Based on provided parameters this model can provide an evaluation with regards to the patients likelihood to have diabetes.",
+    "help_text": "Populate the fields below to make use of the model."
+  },
+  "model": {
+    "name": "diabetes_model",
+    "description": "Estimates if a patient has diabetes based on certain parameters.",
+    "type": "binary",
+    "in_transformer": true,
+    "out_transformer": true
+  },
+  "features": [
+    {
+      "name": "Pregnancies",
+      "data_label": "Pregnancies",
+      "description": "The number of pregnancies the subject has had.",
+      "type": "numeric"
+    },
+    {
+      "name": "Glucose",
+      "data_label": "Glucose",
+      "description": "Subjects glucose level.",
+      "type": "numeric"
+    },
+    {
+      "name": "Blood Pressure",
+      "data_label": "BloodPressure",
+      "description": "Subjects blood pressure level.",
+      "type": "numeric"
+    },
+    {
+      "name": "Skin Thickness",
+      "data_label": "SkinThickness",
+      "description": "Subjects skin thickness in percentages.",
+      "type": "numeric"
+    },
+    {
+      "name": "Insulin",
+      "data_label": "Insulin",
+      "description": "Subjects insulin level in mg.",
+      "type": "numeric"
+    },
+    {
+      "name": "BMI",
+      "data_label": "BMI",
+      "description": "Subjects body-mass index.",
+      "type": "numeric"
+    },
+    {
+      "name": "Diabetes Pedigree Function",
+      "data_label": "DiabetesPedigreeFunction",
+      "description": "Subjects diabetes pedigree function.",
+      "type": "numeric"
+    },
+
+    {
+      "name": "Age",
+      "data_label": "Age",
+      "description": "Subjects age.",
+      "type": "numeric"
+    }
+  ],
+  "target": {
+    "name": "Diabetes",
+    "description": "The patient has diabetes by model estimations.",
+    "type": "numeric"
+  }
+}
