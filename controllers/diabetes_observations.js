@@ -14,7 +14,7 @@ const setStatusForSingleObservation = async (id, status) => {
     },
   };
 
-  const result = await diabetesCollection.updateOne(filter, updateObservation);
+  await diabetesCollection.updateOne(filter, updateObservation);
 };
 
 const getRandomSingleObservation = async (req, res) => {
@@ -37,6 +37,7 @@ const getRandomSingleObservation = async (req, res) => {
 
 const saveSingleObservationPrediction = async (req, res) => {
   try {
+    console.log(req.body);
     const observation = await diabetesCollection.findOne({
       _id: new ObjectId(req.body.objectId),
     });

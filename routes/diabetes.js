@@ -2,7 +2,6 @@ const express = require("express");
 const {
   getRandomSingleObservation,
   getConfig,
-  post,
   saveSingleObservationPrediction,
 } = require("../controllers/diabetes_observations.js");
 
