@@ -3,7 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config({ path: "./.env" });
 const diabetesRoute = require("./routes/diabetes.js");
-const client = require("./db/connection.js");
+const usersRoute = require("./routes/users.js");
 
 const app = express();
 app.use(cors());
@@ -14,6 +14,7 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/diabetes", diabetesRoute);
+app.use("/users", usersRoute);
 
 const PORT = process.env.PORT || 5000;
 

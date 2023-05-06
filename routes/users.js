@@ -14,4 +14,5 @@ router.delete("/", deleteUser);
 router.patch("/", editUser);
 router.get("/invite", inviteUser);
 router.get("/getUsers", getAllUsers);
+
 module.exports = router;

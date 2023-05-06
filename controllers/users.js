@@ -45,7 +45,9 @@ const editUser = async (req, res) => {
   }
 };
 
-const inviteUser = async (req, res) => {
+const inviteUser = async (req, res) => {};
+
+const inviteUser2 = async (req, res) => {
   try {
     //get user id
     const filter = { _id: new ObjectId(req.body.objectId) };
