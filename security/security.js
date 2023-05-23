@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+const nodemailer = require('nodemailer');
 const generateRandomString = (length) => {
   let result = "";
   const characters =
@@ -11,80 +13,38 @@ const generateRandomString = (length) => {
   return result;
 };
 
+const sendEmail = async () => {
+  try {
+    // E-posta göndermek için kullanacağınız e-posta hesap bilgilerini girin
+    const transporter = nodemailer.createTransport({
+      service: "Gmail", // E-posta sağlayıcınıza göre değişebilir
+      auth: {
+        user: "ayberk.aygun07@gmail.com", // E-posta adresiniz
+        pass: "***********", // E-posta şifreniz
+      },
+    });
 
-const encryptString = (givenString) => {
-  // convert the string to a buffer
-  const stringBuffer = Buffer.from(givenString, 'utf-8');
-  
-  // create a hash object using the SHA-256 algorithm
-  const hashObject = crypto.createHash('sha256');
-  
-  // update the hash with the buffer
-  hashObject.update(stringBuffer);
-  
-  // generate the hash as a buffer
-  const hashBuffer = hashObject.digest();
-  
-  // convert the hash buffer to a hexadecimal string and return it
-  return hashBuffer.toString('hex');
+    // Rastgele şifrelenmiş dizeyi oluşturun
+    const randomString = generateRandomString(10);
 
+    // Token oluşturun
+    const token = jwt.sign({ randomString }, "your_secret_key");
 
+    // E-posta ayarlarınızı ve içeriğinizi düzenleyin
+    const mailOptions = {
+      from: "ayberk.aygun07@gmail.com", // Gönderen e-posta adresi
+      to: "ayberk.aygun127@gmail.com", // Alıcı e-posta adresi
+      subject: "Şifre Sıfırlama Bağlantısı", // E-posta konusu
+      text: `Aşağıdaki bağlantıyı kullanarak şifrenizi sıfırlayabilirsiniz: https://example.com/reset-password?token=${token}`, // E-posta içeriği (metin formatı)
+    };
+
+    // E-postayı gönderin
+    const info = await transporter.sendMail(mailOptions);
+    console.log("E-posta gönderildi:", info.messageId);
+  } catch (error) {
+    console.error("E-posta gönderme hatası:", error);
+  }
 };
 
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
-
-// gizli anahtar
-const secretKey = 'my_secret_key';
-
-// kullanıcı bilgileri
-const user = {
-  name: 'John Doe',
-  email: 'johndoe@example.com'
-};
-
-// token oluşturma fonksiyonu
-function generateToken(user, secret) {
-  const payload = {
-    sub: user.email,
-    name: user.name,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (60 * 60) // 1 saat geçerli
-  };
-
-  const token = crypto.createHmac('sha256', secret)
-    .update(JSON.stringify(payload))
-    .digest('hex');
-
-  return token;
-}
-
-// e-posta gönderme fonksiyonu
-async function sendEmail(user, token) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'mygmail@gmail.com',
-      pass: 'mypassword'
-    }
-  });
-
-  const mailOptions = {
-    from: 'mygmail@gmail.com',
-    to: user.email,
-    subject: 'Tokenized link for your account',
-    html: `
-      <p>Hi ${user.name},</p>
-      <p>Click the following link to access your account:</p>
-      <a href="http://example.com/token/${token}">http://example.com/token/${token}</a>
-    `
-  };
-
-  const info = await transporter.sendMail(mailOptions);
-  console.log(`Message sent: ${info.messageId}`);
-}
-
-// uygulama
-const token = generateToken(user, secretKey);
-sendEmail(user, token);
-console.log('Token sent to', user.email);
+// E-posta gönderme fonksiyonunu çağırın.
+sendEmail();
