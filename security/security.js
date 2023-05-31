@@ -22,8 +22,8 @@ async function sendEmail() {
       secure: false,
       requireTLS: true,
       auth: {
-        user: "ayberk.aygun07@gmail.com", // E-posta adresiniz
-        pass: "foiyxmoxerhqogoy", // E-posta şifreniz
+        user: "ayberk.aygun07@gmail.com", // E-posta adresin
+        pass: "App password", // E-posta şifren
       },
     });
 
@@ -37,7 +37,7 @@ async function sendEmail() {
     const mailOptions = {
       from: "ayberk.aygun07@gmail.com", // Gönderen e-posta adresi
       to: "ayberk.aygun127@gmail.com", // Alıcı e-posta adresi
-      subject: "Şifre Sıfırlama Bağlantısı", // E-posta konusu
+      subject: "Tokenize link", // E-posta konusu
       text: `Aşağıdaki bağlantıyı kullanarak giriş yapınız: http://localhost:3000/measure/token=${token}`, // E-posta içeriği (metin formatı)
     };
 
