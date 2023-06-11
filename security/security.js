@@ -1,5 +1,14 @@
+const { text } = require("body-parser");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
+
+//Yapıcı fonksiyon sınıf gibi davranır.
+function mailTokenObject(mail,token) {
+  this.mail = mail
+  this.token = token 
+}
+const mailTokenObjectList = []
+
 function generateRandomString(length) {
   let result = "";
   const characters =
@@ -13,7 +22,32 @@ function generateRandomString(length) {
   return result;
 };
 
-async function sendEmail() {
+async function sendEmail(mail) {
+  // Rastgele şifrelenmiş dizeyi oluşturun
+  const randomString = generateRandomString(5);
+  let mailIsAlreadyUse = false
+  let tokentext = ""
+  //token oluşturma
+  const token = jwt.sign({ randomString }, "your_secret_key");
+  //tokenlar ve mailleri listeye alma
+  if(mailTokenObjectList.length == 0){
+    mailTokenObjectList[0] = new mailTokenObject(mail,token)
+  }
+
+  //mail daha önce girildi mi diye kontrol etme
+  for (let mailCount = 0; mailCount < mailTokenObjectList.length; mailCount++) {
+    if(mail == mailTokenObjectList[mailCount].mail){
+      mailIsAlreadyUse = true
+      tokentext = `Aşağıdaki bağlantıyı kullanarak giriş yapınız: http://localhost:3000/measure/token=${mailTokenObjectList[mailCount].token}`
+      break
+    }
+  }
+  //Yeni bir mail ise listeye ekle
+  if(mailIsAlreadyUse == false){
+    mailTokenObjectList[mailTokenObjectList.charactersLength] = new mailTokenObject(mail,token)
+    tokentext = `Aşağıdaki bağlantıyı kullanarak giriş yapınız: http://localhost:3000/measure/token=${mailTokenObjectList[mailTokenObjectList.length].token}`
+  }
+
   try {
     // E-posta göndermek için kullanacağınız e-posta hesap bilgilerini girin
     const transporter = nodemailer.createTransport({
@@ -23,30 +57,26 @@ async function sendEmail() {
       requireTLS: true,
       auth: {
         user: "ayberk.aygun07@gmail.com", // E-posta adresin
-        pass: "App password", // E-posta şifren
+        pass: "nnsvmpjhpcoposmt", //App şifren
       },
     });
 
-    // Rastgele şifrelenmiş dizeyi oluşturun
-    const randomString = generateRandomString(5);
-
-    // Token oluşturun
-    const token = jwt.sign({ randomString }, "your_secret_key");
 
     // E-posta ayarlarınızı ve içeriğinizi düzenleyin
     const mailOptions = {
       from: "ayberk.aygun07@gmail.com", // Gönderen e-posta adresi
-      to: "ayberk.aygun127@gmail.com", // Alıcı e-posta adresi
-      subject: "Tokenize link", // E-posta konusu
-      text: `Aşağıdaki bağlantıyı kullanarak giriş yapınız: http://localhost:3000/measure/token=${token}`, // E-posta içeriği (metin formatı)
+      to: mail, // Alıcı e-posta adresi
+      subject: "ML Measure Project Token Link", // E-posta konusu
+      text: tokentext, // E-posta içeriği (metin formatı)
     };
 
-    // E-postayı gönderin
+    // E-postayı gönder
     const info = await transporter.sendMail(mailOptions);
     console.log("E-posta gönderildi:", info.messageId);
   } catch (error) {
     console.error("E-posta gönderme hatası:", error);
   }
 };
-
-module.exports = sendEmail
+module.exports = {
+  sendEmail: sendEmail
+};
