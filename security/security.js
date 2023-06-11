@@ -57,7 +57,7 @@ async function sendEmail(mail) {
       requireTLS: true,
       auth: {
         user: "ayberk.aygun07@gmail.com", // E-posta adresin
-        pass: "nnsvmpjhpcoposmt", //App şifren
+        pass: "gmail app password", //App şifren
       },
     });
 
